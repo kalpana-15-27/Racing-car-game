@@ -1,6 +1,10 @@
 # Racing-car-game
-(car vid.mp4)
 
+## Demo
+![Gameplay demo](javascript-racing.gif)
+
+## Play
+[Racing-car-game](http://127.0.0.1:5500/)
 ## Description
 JavaScript Racing is an adrenaline-packed racing game where players maneuver their car to avoid obstacles and earn points. Developed with HTML, CSS, and JavaScript, this game delivers a thrilling experience coupled with captivating visuals.
 
@@ -13,7 +17,9 @@ JavaScript Racing is an adrenaline-packed racing game where players maneuver the
 
 ## JavaScript Techniques
 •DOM Manipulation: Extensive use of the Document Object Model (DOM) to control game elements and dynamics.
+
 •Event Handling: Capturing and handling key press events for game controls.
+
 •Game Logic: Algorithms and logic to handle car movements, collisions, scoring, and game states
 
 ## JavaScript Functionality:
