@@ -26,6 +26,46 @@ startBtn.addEventListener("click", () => start(1));
 document.addEventListener("keydown", pressOn);
 document.addEventListener("keyup", pressOff);
 
+// --- ADDED FOR TOUCH CONTROLS ---
+gameArea.addEventListener("touchstart", handleTouchStart, { passive: false });
+gameArea.addEventListener("touchmove", handleTouchMove, { passive: false });
+// --------------------------------
+
+function handleTouchStart(e) {
+  // Prevent default browser actions (like scrolling) and start moving the car
+  e.preventDefault();
+  handleTouchMove(e);
+}
+
+function handleTouchMove(e) {
+  // Prevent default browser actions
+  e.preventDefault();
+  if (player.start && !player.isGamePaused) {
+    // Check if there's a touch point
+    if (e.touches.length > 0) {
+      let touch = e.touches[0];
+      let road = gameArea.getBoundingClientRect();
+      let carWidth = car.offsetWidth;
+      
+      // Calculate the new X position of the car based on the touch position
+      // We subtract road.left to get the position relative to the gameArea
+      // We subtract half the car's width to center the car on the finger
+      let newX = touch.clientX - road.left - (carWidth / 2);
+
+      // Boundary checks to keep the car within the game area
+      if (newX < 0) {
+        newX = 0;
+      }
+      if (newX > road.width - carWidth) {
+        newX = road.width - carWidth;
+      }
+
+      // Update the player's x position. The game loop will handle rendering.
+      player.x = newX;
+    }
+  }
+}
+
 function pressOn(e) {
   e.preventDefault();
   keys[e.key] = true;
@@ -74,7 +114,6 @@ function moveEnemy() {
       console.log("HIT");
       endGame();
     }
-    
     if (item.y >= 1500) {
       item.y = -600;
       item.style.left = Math.floor(Math.random() * 350) + "px";
@@ -93,6 +132,7 @@ function playGame() {
   moveEnemy();
   let road = gameArea.getBoundingClientRect();
   if (player.start) {
+    // Keyboard controls (still works on desktop)
     if (keys.ArrowUp && player.y > road.top) {
       player.y -= player.speed;
     }
@@ -127,21 +167,22 @@ function endGame() {
     localStorage.setItem("highScore", player.score);
     score.innerHTML = `New High Score! Score: ${player.score}`;
   } else {
-    score.innerHTML = `Game Over🤕💥!! Score was: ${player.score}`;
+    score.innerHTML = `Game Over🤕💥!! Score was ${player.score}`;
   }
   gameArea.classList.add("fadeOut"); // Add fade out animation
   startBtn.classList.remove("hide");
 }
+
 function start(level) {
   gameArea.classList.remove("fadeOut"); // Remove fade out animation
   startBtn.classList.add("hide");
   gameArea.innerHTML = "";
-  lines = [];
-  enemies = [];
+
   player.start = true;
   player.speed = 5 + (level - 1) * 2;
   player.score = 0;
-  
+  player.isGamePaused = false; // Ensure game is not paused on start
+  pauseScreen.classList.add("hide"); // Ensure pause screen is hidden
 
   for (let x = 0; x < 10; x++) {
     let div = document.createElement("div");
@@ -155,23 +196,18 @@ function start(level) {
   car = document.createElement("div");
   car.setAttribute("class", "car");
   gameArea.appendChild(car);
-  player.x = (gameArea.offsetWidth/2)-(car.offsetWidth/2);
-  player.y = gameArea.offsetHeight-car.offsetHeight-20;
-  car.style.left = player.x +"px";
-  car.style.top = player.y + "px";
+  player.x = car.offsetLeft;
+  player.y = car.offsetTop;
+
   const numEnemies = 3 + level;
 
   for (let x = 0; x < numEnemies; x++) {
     let enemy = document.createElement("div");
     enemy.classList.add("enemy");
     enemy.innerHTML = `<br>${x + 1}`;
-    enemy.y = (x + 1) * 800 * -1;
+    enemy.y = (x + 1) * 600 * -1;
     enemy.style.top = `${enemy.y}px`;
-    let enemyLeft;
-    do{
-      enemyLeft = Math.floor(Math.random() * (gameArea.offsetWidth - 50));
-    }while(Math.abs(enemyLeft - player.x) < 50 && enemy.y >= player.y - 130 && enemy.y <= player.y + car.offsetHeight + 30);
-    enemy.style.left = `${Math.floor(Math.random() * (gameArea.offsetwidth-50))}px`;
+    enemy.style.left = `${Math.floor(Math.random() * 350)}px`;
     enemy.style.backgroundColor = randomColor();
     gameArea.appendChild(enemy);
     enemies.push(enemy);
@@ -184,4 +220,3 @@ function randomColor() {
   let hex = Math.floor(Math.random() * 16777215).toString(16);
   return "#" + ("000000" + hex).slice(-6);
 }
-
