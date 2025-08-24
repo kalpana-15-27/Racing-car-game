@@ -4,7 +4,7 @@
 ![Gameplay demo](javascript-racing.gif)
 
 ## Play
-[Racing-car-game](http://127.0.0.1:5500/)
+[Racing-car-game](http://192.168.100.17:5500/)
 ## Description
 JavaScript Racing is an adrenaline-packed racing game where players maneuver their car to avoid obstacles and earn points. Developed with HTML, CSS, and JavaScript, this game delivers a thrilling experience coupled with captivating visuals.
 
