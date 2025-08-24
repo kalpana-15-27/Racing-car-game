@@ -4,7 +4,7 @@
 ![Gameplay demo](javascript-racing.gif)
 
 ## Play
-[Racing-car-game](https://github.com/kalpana-15-27/Racing-car-game.git)
+[Racing-car-game](http://192.168.100.17:5500/index.html)
 ## Description
 JavaScript Racing is an adrenaline-packed racing game where players maneuver their car to avoid obstacles and earn points. Developed with HTML, CSS, and JavaScript, this game delivers a thrilling experience coupled with captivating visuals.
 
